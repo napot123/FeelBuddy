@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Challenge | MINDCARE</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .challenge-container {
+            max-width: 850px;
+            margin: 60px auto;
+            padding: 25px;
+        }
+
+        .challenge-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .challenge-header h1 {
+            color: #315b86;
+        }
+
+        .progress-box, .challenge-list {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .progress-bar {
+            background: #e5edf5;
+            height: 12px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .progress-fill {
+            background: #78aee0;
+            width: 0%;
+            height: 100%;
+            transition: 0.3s;
+        }
+
+        .challenge-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 17px 0;
+            border-bottom: 1px solid #edf1f6;
+        }
+
+        .challenge-item:last-child {
+            border-bottom: none;
+        }
+
+        .challenge-item input {
+            width: 20px;
+            height: 20px;
+            accent-color: #6b9ed1;
+            cursor: pointer;
+        }
+
+        .challenge-item label {
+            color: #456789;
+            cursor: pointer;
+        }
+
+        .challenge-item.done label {
+            text-decoration: line-through;
+            color: #9aaabd;
+        }
+
+        .reset-btn {
+            background: #6b9ed1;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .reset-btn:hover {
+            background: #4f83b8;
+        }
+
+        .challenge-footer {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">MINDCARE</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mood.html">Mood Tracker</a></li>
+            <li><a href="challenge.html">Challenge</a></li>
+            <li><a href="quiz.html">EduQuiz</a></li>
+            <li><a href="education.html">Education</a></li>
+            <li><a href="sos.html">SOS Help</a></li>
+        </ul>
+    </nav>
+
+    <main class="challenge-container">
+
+        <div class="challenge-header">
+            <h1>Daily Positive Challenge 🌷</h1>
+            <p>Mulai dari kebiasaan kecil untuk hari yang lebih baik!</p>
+        </div>
+
+        <div class="progress-box">
+            <h3>Today's Progress</h3>
+            <p id="progressText">0 dari 6 tantangan selesai</p>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="challenge-list">
+            <h2>My Daily Challenge</h2>
+
+            <div class="challenge-item">
+                <input type="checkbox" id="task1">
+                <label for="task1">💧 Minum air putih yang cukup</label>
+            </div>
+
+            <div class="challenge-item">
+                <input type="checkbox" id="task2">
+                <label for="task2">📚 Membaca atau belajar hal baru</label>
+            </div>
+
+            <div class="challenge-item">
+                <input type="checkbox" id="task3">
+                <label for="task3">🌿 Meluangkan waktu untuk beristirahat</label>
+            </div>
+
+            <div class="challenge-item">
+                <input type="checkbox" id="task4">
+                <label for="task4">😊 Melakukan satu hal yang disukai</label>
+            </div>
+
+            <div class="challenge-item">
+                <input type="checkbox" id="task5">
+                <label for="task5">💬 Menghubungi teman atau keluarga</label>
+            </div>
+
+            <div class="challenge-item">
+                <input type="checkbox" id="task6">
+                <label for="task6">✨ Menuliskan satu hal yang disyukuri</label>
+            </div>
+        </div>
+
+        <div class="challenge-footer">
+            <button class="reset-btn" onclick="resetChallenge()">
+                Reset Challenge
+            </button>
+        </div>
+
+    </main>
+
+    <script>
+        const checkboxes = document.querySelectorAll(
+            '.challenge-item input'
+        );
+
+        const today = new Date().toLocaleDateString("id-ID");
+
+        let savedData = JSON.parse(
+            localStorage.getItem("challengeData")
+        );
+
+        if (!savedData || savedData.date !== today) {
+            savedData = {
+                date: today,
+                completed: []
+            };
+        }
+
+        function updateProgress() {
+            const completed = [];
+
+            checkboxes.forEach((checkbox, index) => {
+                const item = checkbox.closest(".challenge-item");
+
+                if (checkbox.checked) {
+                    completed.push(index);
+                    item.classList.add("done");
+                } else {
+                    item.classList.remove("done");
+                }
+            });
+
+            savedData.completed = completed;
+
+            localStorage.setItem(
+                "challengeData",
+                JSON.stringify(savedData)
+            );
+
+            const total = checkboxes.length;
+            const percentage = (completed.length / total) * 100;
+
+            document.getElementById("progressText").textContent =
+                `${completed.length} dari ${total} tantangan selesai`;
+
+            document.getElementById("progressFill").style.width =
+                percentage + "%";
+        }
+
+        checkboxes.forEach((checkbox, index) => {
+            checkbox.checked = savedData.completed.includes(index);
+
+            checkbox.addEventListener("change", updateProgress);
+        });
+
+        function resetChallenge() {
+            if (confirm("Yakin ingin mengulang tantangan hari ini?")) {
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+
+                updateProgress();
+            }
+        }
+
+        updateProgress();
+    </script>
+
+</body>
+</html>

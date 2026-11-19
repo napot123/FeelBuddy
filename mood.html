@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Tracker | MINDCARE</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .mood-section {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .mood-section h1 {
+            color: #315b86;
+            margin-bottom: 10px;
+        }
+
+        .mood-options {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 35px 0;
+        }
+
+        .mood-card {
+            background: white;
+            border: 2px solid #dceafa;
+            border-radius: 18px;
+            padding: 20px;
+            width: 130px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+
+        .mood-card:hover,
+        .mood-card.active {
+            border-color: #6b9ed1;
+            background: #eaf4ff;
+            transform: translateY(-5px);
+        }
+
+        .mood-card span {
+            display: block;
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        .save-btn {
+            background: #6b9ed1;
+            color: white;
+            border: none;
+            padding: 13px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .save-btn:hover {
+            background: #4f83b8;
+        }
+
+        .mood-result {
+            margin-top: 25px;
+            color: #315b86;
+        }
+
+        .history {
+            margin-top: 40px;
+            text-align: left;
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+        }
+
+        .history-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #e5edf5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">MINDCARE</div>
+
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mood.html">Mood Tracker</a></li>
+            <li><a href="challenge.html">Challenge</a></li>
+            <li><a href="quiz.html">EduQuiz</a></li>
+            <li><a href="education.html">Education</a></li>
+            <li><a href="sos.html">SOS Help</a></li>
+        </ul>
+    </nav>
+
+    <section class="mood-section">
+        <h1>How Are You Feeling Today?</h1>
+        <p>Pilih suasana hati yang paling menggambarkan perasaanmu hari ini.</p>
+
+        <div class="mood-options">
+            <div class="mood-card" data-mood="Senang">
+                <span>😊</span>
+                Senang
+            </div>
+
+            <div class="mood-card" data-mood="Tenang">
+                <span>😌</span>
+                Tenang
+            </div>
+
+            <div class="mood-card" data-mood="Biasa saja">
+                <span>😐</span>
+                Biasa saja
+            </div>
+
+            <div class="mood-card" data-mood="Sedih">
+                <span>😔</span>
+                Sedih
+            </div>
+
+            <div class="mood-card" data-mood="Stres">
+                <span>😣</span>
+                Stres
+            </div>
+        </div>
+
+        <button class="save-btn" onclick="saveMood()">
+            Simpan Mood
+        </button>
+
+        <div class="mood-result" id="result"></div>
+
+        <div class="history">
+            <h2>Riwayat Mood</h2>
+            <div id="moodHistory">
+                <p>Belum ada mood yang dicatat.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let selectedMood = "";
+
+        const moodCards = document.querySelectorAll(".mood-card");
+
+        moodCards.forEach(card => {
+            card.addEventListener("click", function() {
+                moodCards.forEach(item => item.classList.remove("active"));
+
+                this.classList.add("active");
+                selectedMood = this.dataset.mood;
+            });
+        });
+
+        function saveMood() {
+            if (selectedMood === "") {
+                alert("Silakan pilih mood terlebih dahulu!");
+                return;
+            }
+
+            const today = new Date().toLocaleDateString("id-ID");
+
+            let moodData = JSON.parse(localStorage.getItem("moodData")) || [];
+
+            moodData.unshift({
+                mood: selectedMood,
+                date: today
+            });
+
+            localStorage.setItem("moodData", JSON.stringify(moodData));
+
+            document.getElementById("result").innerHTML =
+                "Mood kamu berhasil disimpan! 💙";
+
+            selectedMood = "";
+            moodCards.forEach(card => card.classList.remove("active"));
+
+            showHistory();
+        }
+
+        function showHistory() {
+            let moodData = JSON.parse(localStorage.getItem("moodData")) || [];
+
+            const history = document.getElementById("moodHistory");
+
+            if (moodData.length === 0) {
+                history.innerHTML = "<p>Belum ada mood yang dicatat.</p>";
+                return;
+            }
+
+            history.innerHTML = "";
+
+            moodData.forEach(item => {
+                history.innerHTML += `
+                    <div class="history-item">
+                        <strong>${item.mood}</strong>
+                        <br>
+                        <small>${item.date}</small>
+                    </div>
+                `;
+            });
+        }
+
+        showHistory();
+    </script>
+
+</body>
+</html>

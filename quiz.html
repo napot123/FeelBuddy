@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduQuiz | MINDCARE</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .quiz-container {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 25px;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .quiz-header h1 {
+            color: #315b86;
+        }
+
+        .quiz-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .question {
+            color: #315b86;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            display: block;
+            padding: 15px;
+            border: 2px solid #e1ebf5;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            color: #456789;
+        }
+
+        .option:hover {
+            background: #edf6ff;
+            border-color: #78aee0;
+        }
+
+        .option input {
+            margin-right: 10px;
+            accent-color: #6b9ed1;
+        }
+
+        .quiz-btn {
+            background: #6b9ed1;
+            color: white;
+            border: none;
+            padding: 13px 28px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .quiz-btn:hover {
+            background: #4f83b8;
+        }
+
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            background: #edf6ff;
+            color: #315b86;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">MINDCARE</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mood.html">Mood Tracker</a></li>
+            <li><a href="challenge.html">Challenge</a></li>
+            <li><a href="quiz.html">EduQuiz</a></li>
+            <li><a href="education.html">Education</a></li>
+            <li><a href="sos.html">SOS Help</a></li>
+        </ul>
+    </nav>
+
+    <main class="quiz-container">
+
+        <div class="quiz-header">
+            <h1>Mindcare EduQuiz 🧠</h1>
+            <p>Uji pengetahuanmu tentang bahaya miras dan narkoba!</p>
+        </div>
+
+        <div class="quiz-card">
+            <h3 id="questionNumber"></h3>
+            <h2 class="question" id="question"></h2>
+
+            <div id="options"></div>
+
+            <button class="quiz-btn" id="nextBtn" onclick="nextQuestion()">
+                Jawab & Lanjut
+            </button>
+
+            <div id="result"></div>
+        </div>
+
+    </main>
+
+    <script>
+        const questions = [
+            {
+                question: "Apa salah satu dampak buruk mengonsumsi alkohol?",
+                options: [
+                    "Meningkatkan konsentrasi",
+                    "Mengganggu fungsi otak dan koordinasi",
+                    "Membuat tubuh selalu sehat",
+                    "Meningkatkan daya ingat"
+                ],
+                answer: 1,
+                explanation: "Alkohol dapat mengganggu fungsi otak, koordinasi, dan kemampuan mengambil keputusan."
+            },
+            {
+                question: "Apa yang dimaksud dengan narkoba?",
+                options: [
+                    "Zat yang selalu aman dikonsumsi",
+                    "Zat yang dapat memengaruhi sistem saraf dan menimbulkan ketergantungan",
+                    "Minuman penambah energi",
+                    "Vitamin untuk tubuh"
+                ],
+                answer: 1,
+                explanation: "Narkoba dapat memengaruhi sistem saraf dan berisiko menimbulkan ketergantungan serta masalah kesehatan."
+            },
+            {
+                question: "Apa yang sebaiknya dilakukan jika teman mengajak mencoba narkoba?",
+                options: [
+                    "Mencoba sekali saja",
+                    "Mengikuti ajakan teman",
+                    "Menolak dan mencari bantuan orang dewasa tepercaya",
+                    "Menyimpan ajakan tersebut sendiri"
+                ],
+                answer: 2,
+                explanation: "Kamu berhak menolak. Mintalah bantuan orang tua, guru, atau orang dewasa tepercaya."
+            },
+            {
+                question: "Mengapa remaja perlu menghindari miras dan narkoba?",
+                options: [
+                    "Dapat mengganggu kesehatan dan perkembangan",
+                    "Membuat belajar lebih mudah",
+                    "Meningkatkan prestasi",
+                    "Tidak memiliki dampak apa pun"
+                ],
+                answer: 0,
+                explanation: "Zat-zat tersebut dapat mengganggu kesehatan fisik, mental, dan perkembangan remaja."
+            },
+            {
+                question: "Kepada siapa kita bisa meminta bantuan jika menghadapi masalah penyalahgunaan zat?",
+                options: [
+                    "Orang yang tidak dikenal",
+                    "Orang tua, guru BK, atau tenaga kesehatan",
+                    "Hanya media sosial",
+                    "Tidak perlu meminta bantuan"
+                ],
+                answer: 1,
+                explanation: "Orang tua, guru BK, dan tenaga kesehatan dapat membantu memberikan dukungan yang tepat."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        function showQuestion() {
+            answered = false;
+
+            const q = questions[currentQuestion];
+
+            document.getElementById("questionNumber").textContent =
+                `Pertanyaan ${currentQuestion + 1} dari ${questions.length}`;
+
+            document.getElementById("question").textContent = q.question;
+
+            const options = document.getElementById("options");
+            options.innerHTML = "";
+
+            q.options.forEach((option, index) => {
+                options.innerHTML += `
+                    <label class="option">
+                        <input type="radio" name="answer" value="${index}">
+                        ${option}
+                    </label>
+                `;
+            });
+
+            document.getElementById("result").style.display = "none";
+            document.getElementById("nextBtn").textContent = "Jawab & Lanjut";
+        }
+
+        function nextQuestion() {
+            if (answered) {
+                currentQuestion++;
+
+                if (currentQuestion < questions.length) {
+                    showQuestion();
+                } else {
+                    showFinalResult();
+                }
+
+                return;
+            }
+
+            const selected = document.querySelector(
+                'input[name="answer"]:checked'
+            );
+
+            if (!selected) {
+                alert("Silakan pilih jawaban terlebih dahulu!");
+                return;
+            }
+
+            const q = questions[currentQuestion];
+            const isCorrect = Number(selected.value) === q.answer;
+
+            if (isCorrect) {
+                score++;
+            }
+
+            const result = document.getElementById("result");
+            result.style.display = "block";
+
+            result.innerHTML = `
+                <h3>${isCorrect ? "Benar! 🎉" : "Belum tepat 💙"}</h3>
+                <p>${q.explanation}</p>
+            `;
+
+            answered = true;
+            document.getElementById("nextBtn").textContent =
+                currentQuestion === questions.length - 1
+                ? "Lihat Hasil"
+                : "Pertanyaan Berikutnya";
+        }
+
+        function showFinalResult() {
+            document.querySelector(".quiz-card").innerHTML = `
+                <div style="text-align:center;">
+                    <h2>Quiz Selesai! 🎉</h2>
+                    <h1 style="color:#6098ce;">
+                        ${score} / ${questions.length}
+                    </h1>
+                    <p>
+                        ${score === questions.length
+                            ? "Hebat! Semua jawabanmu benar!"
+                            : "Terus belajar dan tingkatkan pengetahuanmu, ya!"}
+                    </p>
+                    <button class="quiz-btn" onclick="restartQuiz()">
+                        Ulangi Quiz
+                    </button>
+                </div>
+            `;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+
+            document.querySelector(".quiz-card").innerHTML = `
+                <h3 id="questionNumber"></h3>
+                <h2 class="question" id="question"></h2>
+                <div id="options"></div>
+                <button class="quiz-btn" id="nextBtn" onclick="nextQuestion()">
+                    Jawab & Lanjut
+                </button>
+                <div id="result"></div>
+            `;
+
+            showQuestion();
+        }
+
+        showQuestion();
+    </script>
+
+</body>
+</html>

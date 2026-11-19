@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Help | MINDCARE</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .sos-container {
+            max-width: 850px;
+            margin: 60px auto;
+            padding: 25px;
+        }
+
+        .sos-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .sos-header h1 {
+            color: #315b86;
+        }
+
+        .sos-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .sos-card h2 {
+            color: #4f83b8;
+        }
+
+        .sos-card p {
+            color: #58718b;
+            line-height: 1.7;
+        }
+
+        .contact-btn {
+            display: inline-block;
+            text-decoration: none;
+            background: #6b9ed1;
+            color: white;
+            padding: 13px 25px;
+            border-radius: 25px;
+            margin-top: 12px;
+            transition: 0.3s;
+        }
+
+        .contact-btn:hover {
+            background: #4f83b8;
+        }
+
+        .sos-note {
+            background: #eaf4ff;
+            color: #315b86;
+            padding: 20px;
+            border-radius: 15px;
+            line-height: 1.7;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">MINDCARE</div>
+
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mood.html">Mood Tracker</a></li>
+            <li><a href="challenge.html">Challenge</a></li>
+            <li><a href="quiz.html">EduQuiz</a></li>
+            <li><a href="education.html">Education</a></li>
+            <li><a href="sos.html">SOS Help</a></li>
+        </ul>
+    </nav>
+
+    <main class="sos-container">
+
+        <div class="sos-header">
+            <h1>Need Someone to Talk To? 💙</h1>
+            <p>
+                Kamu tidak harus menghadapi semuanya sendirian.
+                Jangan ragu untuk meminta bantuan.
+            </p>
+        </div>
+
+        <div class="sos-card">
+            <h2>👨‍👩‍👧 Hubungi Orang Tua</h2>
+            <p>
+                Jika kamu merasa tidak aman atau membutuhkan dukungan,
+                hubungi orang tua atau keluarga yang kamu percaya.
+            </p>
+
+            <a href="tel:08XXXXXXXXXX" class="contact-btn"
+               onclick="return confirm('Hubungi nomor orang tua yang sudah kamu atur?')">
+                Hubungi Orang Tua
+            </a>
+        </div>
+
+        <div class="sos-card">
+            <h2>🏫 Hubungi Guru BK</h2>
+            <p>
+                Guru BK dapat membantu mendengarkan cerita dan
+                memberikan pendampingan ketika kamu menghadapi masalah.
+            </p>
+
+            <a href="https://wa.me/628XXXXXXXXXX"
+               class="contact-btn"
+               target="_blank"
+               rel="noopener"
+               onclick="return confirm('Buka WhatsApp untuk menghubungi guru BK?')">
+                Chat Guru BK
+            </a>
+        </div>
+
+        <div class="sos-card">
+            <h2>🩺 Bantuan Kesehatan</h2>
+            <p>
+                Jika ada keadaan darurat yang mengancam keselamatan,
+                segera minta bantuan orang dewasa dan layanan darurat setempat.
+            </p>
+
+            <a href="tel:112" class="contact-btn"
+               onclick="return confirm('Hubungi layanan darurat?')">
+                Hubungi 112
+            </a>
+        </div>
+
+        <div class="sos-note">
+            <strong>💡 Catatan penting:</strong>
+            <p>
+                Ganti nomor contoh pada tombol Orang Tua dan Guru BK
+                dengan nomor kontak tepercaya yang benar. Tombol ini
+                hanya membuka aplikasi telepon atau WhatsApp, bukan
+                mengirim laporan otomatis. Ketersediaan nomor darurat
+                dapat berbeda di setiap daerah.
+            </p>
+        </div>
+
+    </main>
+
+</body>
+</html>
